@@ -1,8 +1,8 @@
 [
   {
-    "repository": "PixelExperience/kernel_redmi_rosemary",
+    "repository": "windowz414/evox_kernel_redmi_rosemary",
     "target_path": "kernel/redmi/rosemary",
-    "branch": "thirteen"
+    "branch": "tiramisu"
   },
   {
     "repository": "vendor_redmi_rosemary",
@@ -34,6 +34,11 @@
   {
     "repository": "PixelExperience/device_mediatek_sepolicy_vndr",
     "target_path": "device/mediatek/sepolicy_vndr",
+    "branch": "thirteen"
+  },
+  {
+    "repository": "PixelExperience/prebuilts_clang_kernel_linux-x86_clang-r416183b",
+    "target_path": "prebuilts/clang/kernel/linux-x86/clang-r416183b",
     "branch": "thirteen"
   },
   {
