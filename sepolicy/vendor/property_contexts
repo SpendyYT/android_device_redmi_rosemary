@@ -4,6 +4,9 @@ persist.vendor.camera.mi.module.infoext               u:object_r:vendor_camera_p
 persist.vendor.camera.mi.dualcal.state                u:object_r:vendor_camera_prop:s0
 persist.vendor.camera.mi.dualcal.detail               u:object_r:vendor_camera_prop:s0
 
+# Camera sensor properties
+vendor.camera.sensor.                      u:object_r:vendor_camera_sensor_prop:s0
+
 # Fingerprint properties
 persist.vendor.sys.fp.info          u:object_r:vendor_fp_prop:s0
 persist.vendor.sys.fp.vendor        u:object_r:vendor_fp_prop:s0
