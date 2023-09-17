@@ -35,6 +35,11 @@ PRODUCT_PACKAGES_DEBUG += \
 # API level, the device has been commercially launched on
 PRODUCT_SHIPPING_API_LEVEL := 30
 
+# Camera
+TARGET_CAMERA_USES_NEWER_HIDL_OVERRIDE_FORMAT := true
+TARGET_INCLUDES_MIUI_CAMERA := true
+$(call inherit-product-if-exists, vendor/xiaomi/camera/miuicamera.mk)
+
 # Audio configs
 PRODUCT_COPY_FILES += \
     $(foreach file,$(wildcard $(DEVICE_PATH)/configs/audio/*), \
@@ -52,15 +57,22 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.audio.pro.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.audio.pro.xml \
     frameworks/native/data/etc/android.hardware.audio.low_latency.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.audio.low_latency.xml
 
-# Media codecs
+# Media
 PRODUCT_COPY_FILES += \
-    $(foreach file,$(wildcard $(DEVICE_PATH)/configs/media/*), \
-        $(file):$(addprefix $(TARGET_COPY_OUT_VENDOR)/etc/, $(notdir $(file))) )
+    $(LOCAL_PATH)/configs/media/media_codecs.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs.xml \
+    $(LOCAL_PATH)/configs/media/media_codecs_c2.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_c2.xml \
+    $(LOCAL_PATH)/configs/media/media_codecs_google_audio.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_google_audio.xml \
+    $(LOCAL_PATH)/configs/media/media_codecs_google_video_le.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_google_video_le.xml \
+    $(LOCAL_PATH)/configs/media/media_codecs_mediatek_audio.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_mediatek_audio.xml \
+    $(LOCAL_PATH)/configs/media/media_codecs_mediatek_video.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_mediatek_video.xml \
+    $(LOCAL_PATH)/configs/media/media_codecs_performance.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_performance.xml \
+    $(LOCAL_PATH)/configs/media/media_profiles_V1_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_profiles_V1_0.xml
 
-# Media codecs (from frameworks)
+
 PRODUCT_COPY_FILES += \
-    $(foreach xml, google_audio, \
-        frameworks/av/media/libstagefright/data/media_codecs_$(xml).xml:$(addprefix $(TARGET_COPY_OUT_VENDOR)/etc/, media_codecs_$(xml).xml))
+    $(LOCAL_PATH)/configs/seccomp/mediacodec.policy:$(TARGET_COPY_OUT_VENDOR)/etc/seccomp_policy/mediacodec.policy \
+    $(LOCAL_PATH)/configs/seccomp/mediaextractor.policy:$(TARGET_COPY_OUT_VENDOR)/etc/seccomp_policy/mediaextractor.policy \
+    $(LOCAL_PATH)/configs/seccomp/mediaswcodec.policy:$(TARGET_COPY_OUT_VENDOR)/etc/seccomp_policy/mediaswcodec.policy
 
 # Audio
 PRODUCT_PACKAGES += \
@@ -244,6 +256,12 @@ PRODUCT_USE_DYNAMIC_PARTITIONS := true
 # VNDK
 PRODUCT_TARGET_VNDK_VERSION := 32
 
+# VNDK
+PRODUCT_PACKAGES += \
+    libutils-v32 \
+    libhidlbase-v32 \
+    libui-v32
+
 # Fastbootd
 PRODUCT_PACKAGES += \
     fastbootd \
@@ -361,7 +379,11 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.nfc.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/sku_rosemary/android.hardware.nfc.xml \
     frameworks/native/data/etc/android.hardware.se.omapi.uicc.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/sku_rosemary/android.hardware.se.omapi.uicc.xml
 
-# IMS
+# Xiaomi Parts
+PRODUCT_PACKAGES += \
+    XiaomiParts 
+
+   # IMS
 PRODUCT_BOOT_JARS += \
     mediatek-common \
     mediatek-framework \
@@ -413,6 +435,10 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/props/sku/system_ext/secret.build.prop:$(TARGET_COPY_OUT_SYSTEM_EXT)/secret.build.prop \
     $(LOCAL_PATH)/props/sku/system_ext/maltose.build.prop:$(TARGET_COPY_OUT_SYSTEM_EXT)/maltose.build.prop
 
+PRODUCT_SYSTEM_PROPERTIES += \
+    persist.vendor.camera.privapp.list=org.codeaurora.snapcam,com.android.camera \
+    vendor.camera.aux.packagelist=org.codeaurora.snapcam,com.android.camera
+
 # Overridden props
 PRODUCT_COMPATIBLE_PROPERTY_OVERRIDE := true
 include $(DEVICE_PATH)/props/overrides.mk
@@ -445,6 +471,7 @@ PRODUCT_PACKAGES += \
     android.hardware.power@1.1.vendor \
     android.hardware.power@1.2.vendor \
     android.hardware.power@1.3.vendor \
+    android.hardware.power-service-mediatek \
     android.hardware.power-V1-ndk_platform.vendor \
     vendor.mediatek.hardware.power@1.0.vendor \
     vendor.mediatek.hardware.power@1.1.vendor \
@@ -507,7 +534,9 @@ PRODUCT_PACKAGES += \
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
     $(DEVICE_PATH) \
-    hardware/xiaomi
+    hardware/google/interfaces \
+    hardware/google/pixel \
+    hardware/xiaomi 
 
 # Thermal
 PRODUCT_PACKAGES += \
