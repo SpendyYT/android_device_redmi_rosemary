@@ -28,6 +28,11 @@ TARGET_INCLUDE_STOCK_ARCORE := true
 TARGET_INCLUDE_LIVE_WALLPAPERS := true
 TARGET_SUPPORTS_CALL_RECORDING := true
 TARGET_USES_AOSP_RECOVERY := true
+TARGET_USES_MINI_GAPPS := true
+EVO_BUILD_TYPE := community
+
+# Blur
+TARGET_ENABLE_BLUR := true
 
 # Kasumi's GCam GO
 $(call inherit-product-if-exists, $(GCGOP_VENDOR_DIR)/config.mk)
